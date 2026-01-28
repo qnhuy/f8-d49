@@ -4,7 +4,9 @@
     "express": "^5.2.1"
   },
   "scripts": {
-    "start": "node --watch server"
+    "start": "node server"
   },
-  "type": "commonjs"
+  "type": "module",
+  "name": "f8-d49",
+  "version": "1.0.0"
 }

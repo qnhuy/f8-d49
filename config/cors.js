@@ -1,5 +1,5 @@
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://qnhuy.github.io'],
+  origin: process.env.CLIENT_URL || '*',
   optionsSuccessStatus: 200,
 }
 
