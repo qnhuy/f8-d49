@@ -1,4 +1,4 @@
-const { loadDB, saveDB } = require('../utils/jsonDB')
+const { loadDB, saveDB } = require('../../utils/jsonDB')
 
 let commentDB = []
 let biggestId = -1

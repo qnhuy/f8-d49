@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const corsOptions = require('./config/cors')
-const router = require('./routes/index')
+const corsOptions = require('./src/config/cors')
+const router = require('./src/routes/index')
 
 const app = express()
 const port = process.env.PORT || 3000
