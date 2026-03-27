@@ -1,12 +1,26 @@
 const postModel = require('../models/post.model')
 
+function parseId(idParam) {
+  const id = Number(idParam)
+  if (!Number.isInteger(id) || id <= 0) {
+    return null
+  }
+  return id
+}
+
 function getAll(_, res) {
   const posts = postModel.findAll()
   res.json({ data: posts })
 }
 
 function getOne(req, res) {
-  const post = postModel.findOne(+req.params.id)
+  const id = parseId(req.params.id)
+  if (!id) {
+    res.status(400).json({ message: 'Invalid resource id' })
+    return
+  }
+
+  const post = postModel.findOne(id)
   if (!post) {
     res.status(404).json({ message: 'Resource not found' })
     return
@@ -20,7 +34,13 @@ function create(req, res) {
 }
 
 function update(req, res) {
-  const updatedPost = postModel.update(+req.params.id, req.body)
+  const id = parseId(req.params.id)
+  if (!id) {
+    res.status(400).json({ message: 'Invalid resource id' })
+    return
+  }
+
+  const updatedPost = postModel.update(id, req.body)
   if (!updatedPost) {
     res.status(404).json({ message: 'Resource not found' })
     return
@@ -29,12 +49,18 @@ function update(req, res) {
 }
 
 function remove(req, res) {
-  const removedPost = postModel.remove(+req.params.id)
+  const id = parseId(req.params.id)
+  if (!id) {
+    res.status(400).json({ message: 'Invalid resource id' })
+    return
+  }
+
+  const removedPost = postModel.remove(id)
   if (!removedPost) {
     res.status(404).json({ message: 'Resource not found' })
     return
   }
-  res.json({ message: 'Delete successfully', data: removedPost })
+  res.sendStatus(204)
 }
 
 module.exports = {

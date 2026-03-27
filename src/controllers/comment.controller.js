@@ -1,12 +1,26 @@
 const commentModel = require('../models/comment.model')
 
+function parseId(idParam) {
+  const id = Number(idParam)
+  if (!Number.isInteger(id) || id <= 0) {
+    return null
+  }
+  return id
+}
+
 function getAll(_, res) {
   const comments = commentModel.findAll()
   res.json({ data: comments })
 }
 
 function getOne(req, res) {
-  const comment = commentModel.findOne(+req.params.id)
+  const id = parseId(req.params.id)
+  if (!id) {
+    res.status(400).json({ message: 'Invalid resource id' })
+    return
+  }
+
+  const comment = commentModel.findOne(id)
   if (!comment) {
     res.status(404).json({ message: 'Resource not found' })
     return
@@ -20,7 +34,13 @@ function create(req, res) {
 }
 
 function update(req, res) {
-  const updatedComment = commentModel.update(+req.params.id, req.body)
+  const id = parseId(req.params.id)
+  if (!id) {
+    res.status(400).json({ message: 'Invalid resource id' })
+    return
+  }
+
+  const updatedComment = commentModel.update(id, req.body)
   if (!updatedComment) {
     res.status(404).json({ message: 'Resource not found' })
     return
@@ -29,12 +49,18 @@ function update(req, res) {
 }
 
 function remove(req, res) {
-  const removedComment = commentModel.remove(+req.params.id)
+  const id = parseId(req.params.id)
+  if (!id) {
+    res.status(400).json({ message: 'Invalid resource id' })
+    return
+  }
+
+  const removedComment = commentModel.remove(id)
   if (!removedComment) {
     res.status(404).json({ message: 'Resource not found' })
     return
   }
-  res.json({ message: 'Delete successfully', data: removedComment })
+  res.sendStatus(204)
 }
 
 module.exports = {
